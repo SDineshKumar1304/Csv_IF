@@ -1,0 +1,214 @@
+/* General Styling */
+body {
+    background: linear-gradient(135deg, #1e2a47, #3c4a78, #0f1c35); /* Dark Blue to Deep Purple Gradient */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #DDD; /* Light Text Color for Contrast on Dark Background */
+    margin: 0;
+    padding: 0;
+}
+
+/* Container Styling */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #1C1C1C; /* Dark Background for the Container */
+    border-radius: 15px;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5); /* Darker Shadow */
+}
+
+/* Header Styling */
+header h1 {
+    color: #dcdcdc; /* White Text for Header */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.8rem;
+    text-transform: uppercase;
+}
+
+/* Flash Messages */
+.flash-messages {
+    margin-bottom: 20px;
+}
+
+.flash-list {
+    list-style: none;
+    padding: 0;
+}
+
+.flash-message {
+    background-color: #FF8C42; /* Warm Orange */
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+/* Input and Button Styling */
+.input-section, .upload-form {
+    margin-bottom: 30px;
+}
+
+.input-field, .file-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #444; /* Dark Border Color */
+    border-radius: 8px;
+    background-color: #333; /* Dark Background for Input Fields */
+    color: #DDD; /* Light Text for Inputs */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Input Field Hover and Focus Effects */
+.input-field:hover, .file-input:hover {
+    border-color: #FC5C7D; /* Soft Pink on Hover */
+    background-color: #444; /* Slightly Lighter Dark Background on Hover */
+}
+
+.input-field:focus, .file-input:focus {
+    border-color: #6A82FB; /* Strong Purple Border on Focus */
+    background-color: #555; /* Slight Blueish Tint on Focus */
+}
+
+/* Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #6A82FB, #FC5C7D); /* Purple to Pink Gradient */
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #FF7A5C, #6A82FB); /* Gradient Shift on Hover */
+    transform: scale(1.05); /* Slight Scale-Up Effect */
+}
+
+.btn-primary:active {
+    background: linear-gradient(135deg, #FF6F61, #FC5C7D); /* Darker Gradient on Click */
+    transform: scale(1); /* Reset Scaling */
+}
+
+/* Table Styling */
+.table-container {
+    margin-top: 30px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #444; /* Dark Border for Table */
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+th {
+    background-color: #1C1C1C; /* Dark Header */
+    color: #FFFFFF;
+}
+
+td {
+    background-color: #333; /* Dark Cells */
+    color: #DDD;
+}
+
+/* Table Row Hover Effect */
+tr:hover {
+    background-color: #444; /* Lighter Dark Hover Effect */
+}
+
+/* Redirect Button Section */
+.redirect-section {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.result-page {
+    display: none;
+}
+
+.result-section h2 {
+    color: #6A82FB; /* Soft Purple Text */
+}
+
+a.btn-primary {
+    text-decoration: none;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        margin-top: 15px;
+    }
+}
+
+/* Markdown Content Styling */
+.markdown-content {
+    background: #333; /* Dark Background for Markdown Content */
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #444; /* Dark Border */
+    color: #DDD; /* Light Text */
+    line-height: 1.6;
+}
+
+/* Headings in Markdown Content */
+.markdown-content h1, 
+.markdown-content h2, 
+.markdown-content h3 {
+    color: #FC5C7D; /* Soft Pink */
+    margin-top: 20px;
+}
+
+.markdown-content p {
+    margin-bottom: 15px;
+}
+
+/* Links Styling */
+.markdown-content a {
+    color: #FF8C42; /* Warm Orange Links */
+    text-decoration: underline;
+}
+
+.markdown-content a:hover {
+    color: #FC5C7D; /* Darker Pink on Hover */
+}
+
+/* Button Styling */
+.button-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6A82FB, #FC5C7D); /* Purple to Pink Gradient */
+    color: #1E2A47; /* Dark Text */
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #FF7A5C, #6A82FB); /* Gradient Shift on Hover */
+    transform: scale(1.05); /* Hover Scale Effect */
+}

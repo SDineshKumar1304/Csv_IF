@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Dashboard with Gemini Integration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <!-- Main Container -->
+    <div class="container">
+        <header>
+            <h1>CSV Dashboard with Gemini Integration</h1>
+        </header>
+
+        <!-- Flash Messages -->
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flash-list">
+                        {% for message in messages %}
+                            <li class="flash-message">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- CSV and Google Sheet Section -->
+        <section class="csv-section">
+            <div class="input-section">
+                <h2>Enter Google Sheets URL</h2>
+                <input type="text" id="sheetUrl" placeholder="Enter Google Sheets URL" class="input-field">
+                <button onclick="fetchGoogleSheetData()" class="btn-primary">Get Data Preview</button>
+            </div>
+
+            <form id="csvUploadForm" action="/upload_csv" method="POST" enctype="multipart/form-data" class="upload-form">
+                <h2>Or Upload a CSV File</h2>
+                <input type="file" id="csvFile" name="file" accept=".csv" required class="file-input" onchange="previewFile()">
+                <input type="text" name="primary_column" placeholder="Primary Column (e.g., companies)" class="input-field" required>
+                <button type="submit" class="btn-primary">Upload CSV</button>
+            </form>
+
+            <div class="table-container">
+                <h3>CSV Preview</h3>
+                <table id="dataPreview">
+                    <thead>
+                        <tr></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Button to Redirect to Generated Markdown File -->
+        <div class="redirect-section">
+            <button id="viewMarkdownBtn" class="btn-primary">View Generated Results</button>
+        </div>
+    </div>
+
+    <!-- Results Page (New Page after Upload) -->
+    <div id="resultPage" class="result-page" style="display:none;">
+        <section class="result-section">
+            <h2>Extracted Results</h2>
+            <div id="resultContainer"></div>
+            <button id="seeResultsBtn" class="btn-primary">See Results</button>
+            <a href="/" class="btn-primary">Go Back</a>
+        </section>
+    </div>
+
+    <script>
+        // Fetch Google Sheet data and display in table
+        function fetchGoogleSheetData() {
+            const sheetUrl = document.getElementById('sheetUrl').value;
+            const url = '/preview_google_sheet';
+            const data = { url: sheetUrl };
+    
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayData(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    
+        function displayData(data) {
+            const table = document.getElementById('dataPreview');
+            const tbody = table.querySelector('tbody');
+            const thead = table.querySelector('thead');
+    
+            // Clear previous data
+            tbody.innerHTML = '';
+            thead.innerHTML = '';
+    
+            if (data.error) {
+                alert('Error: ' + data.error);
+                return;
+            }
+    
+            // Extract headers from the first row
+            const headers = Object.keys(data[0]);
+            const headerRow = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.innerText = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+    
+            // Display data rows
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                headers.forEach(header => {
+                    const td = document.createElement('td');
+                    td.innerText = row[header] || '';
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }
+    
+        document.getElementById('csvUploadForm').onsubmit = function(event) {
+            event.preventDefault(); // Prevent normal form submission
+
+            const formData = new FormData(event.target);
+            fetch('/upload_csv', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())  // Handle response as a blob (markdown file)
+            .then(blob => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'generated_results.md';  // Specify file name
+                link.click();  // Trigger the download
+            })
+            .catch(error => console.error('Error:', error));
+        };
+
+        // Button to view generated Markdown file
+        document.getElementById('viewMarkdownBtn').onclick = function() {
+            window.location.href = '/view_md_file/generated_results.md';
+        };
+    
+        function displayResults(generatedText) {
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = `<pre>${generatedText}</pre>`; // Display the generated text
+            document.getElementById('resultPage').style.display = 'block'; // Show the result page
+            document.querySelector('.container').style.display = 'none'; // Hide the upload form
+        }
+    
+        // Back to the main page when the user clicks 'Go Back'
+        document.getElementById('seeResultsBtn').onclick = function() {
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('resultPage').style.display = 'none';
+        };
+    
+        // Preview the uploaded CSV file
+        function previewFile() {
+            const file = document.getElementById('csvFile').files[0];
+            const reader = new FileReader();
+    
+            reader.onload = function(event) {
+                const contents = event.target.result;
+                const rows = contents.split('\n');
+                const table = document.getElementById('dataPreview');
+                const tbody = table.querySelector('tbody');
+                const thead = table.querySelector('thead');
+    
+                // Clear previous table data
+                tbody.innerHTML = '';
+                thead.innerHTML = '';
+    
+                // Process headers
+                const headers = rows[0].split(',');
+                const headerRow = document.createElement('tr');
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.innerText = header.trim();
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+    
+                // Process rows
+                rows.slice(1).forEach(row => {
+                    const cols = row.split(',');
+                    const tr = document.createElement('tr');
+                    cols.forEach(col => {
+                        const td = document.createElement('td');
+                        td.innerText = col.trim();
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+            };
+    
+            reader.readAsText(file);
+        }
+    </script>
+    
+</body>
+</html>

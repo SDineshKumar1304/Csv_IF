@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Markdown Content</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <header>
+            <h1>Generated Content</h1>
+        </header>
+        
+        <!-- Markdown Content -->
+        <div class="markdown-content">
+            {{ content|safe }}
+        </div>
+
+        <!-- User Query Form -->
+        <div class="query-form">
+            <form action="{{ url_for('handle_user_query') }}" method="post">
+                <label for="user-query">Enter your query:</label>
+                <textarea id="user-query" name="user_query" rows="4" cols="50" placeholder="Type your question or comment here..."></textarea>
+                <button type="submit" class="btn-primary">Submit Query</button>
+            </form>
+        </div>
+
+        <!-- Navigation Button -->
+        <div class="button-container">
+            <a href="{{ url_for('index') }}" class="btn-primary">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
